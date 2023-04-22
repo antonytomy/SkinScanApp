@@ -1,0 +1,19 @@
+body{
+    background-color: #ffe8d6;
+}
+#title{
+    font-size: 32px;
+    color: black;
+    font-family: 'Mukta', sans-serif;
+    margin: 20px;
+}
+
+.spacer{
+    height: 50px;
+}
+
+#selected-image{
+    width: 100px;
+    height:100px;
+}
+

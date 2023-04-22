@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500&family=Mukta&family=PT+Sans&display=swap" rel="stylesheet">
+    <!-- <script src="{{url_for('static',filename='script.js')}}"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script>
+      $(document).ready(function(){
+        let modalTitle=document.querySelector("#staticBackdropLabel");
+        let diagnosisP=document.querySelector("#diagnosis");
+        let base64Image;
+        $("#image-selector").change(function(){
+            let reader=new FileReader();
+            reader.onload=function(e){
+                let dataURL=reader.result;
+                $("#selected-image").attr("src",dataURL);
+                base64Image=dataURL.replace('data:', '').replace(/^.+,/, '');
+
+
+                console.log(base64Image);
+            }
+            reader.readAsDataURL($("#image-selector")[0].files[0]);
+            $("diagnosis").text("");
+        });
+
+
+        $("button").click(function(event){
+            let message={
+                image:base64Image
+            }
+            // console.log(message);
+            $.post("http://127.0.0.1:5000/predict",JSON.stringify(message),function(response){
+            //   num_to_class_name={
+            //     0 :"Actinic keratosis",
+            //     1: "Basal cell carcinoma",
+            //     2: "Benign keratosis-like lesions",
+            //     3: "Dermatofibroma",
+            //     4: "Melanocytic nevi",
+            //     5: "Melanoma",
+            //     6: "Vascular lesion"
+            // }
+
+        if(response.prediction.skin_class=="Actinic keratosis"){
+          modalTitle.innerHTML="SkinScan has diagnosed <b>Actinic Keratosis</b>"
+          diagnosisP.innerHTML="You have been diagnosed with Actinic Keratosis. This skin lesion is a rough, scaly patch on the skin caused by years of sun exposure and is common with more than 3 million US cases per year. Actinic keratosis usually affects older adults. Reducing sun exposure can help reduce risk. It is most common on the face, lips, ears, back of hands, forearms, scalp, and neck. The rough, scaly skin patch enlarges slowly and <b>usually causes no other signs or symptoms and is harmless.</b> A lesion may take years to develop. <b>Because it has the small chance of becoming cancerous, it's usually removed as a precaution in surgery. Please still refer to a professional physician or dermatologist for further confirmation and evaluation of the skin lesion.</b>";
+
+      
+        }
+        else if(response.prediction.skin_class=="Basal cell carcinoma"){
+  
+          modalTitle.innerHTML="SkinScan has diagnosed <b>Basal Cell Carcinoma</b>"
+          diagnosisP.innerHTML="You have been diagnosed with Basal Cell Carcinoma. A type of skin cancer that is very common with more than 3 million American diagnosed every year. The disease begins in the basal cells and they produce new skin cells as old ones die. Limiting sun exposure can help prevent these cells from becoming cancerous. This cancer typically appears as a white waxy lump or a brown scaly patch on sun-exposed areas, such as the face and neck. Treatments include prescription creams or surgery to remove the cancer. <b>Please still refer to a professional physician or dermatologist for further confirmation, evaluation, and potential treatment of the skin lesion.</b>";
+        }
+        else if(response.prediction.skin_class=="Benign keratosis-like lesions"){
+          modalTitle.innerHTML="SkinScan has diagnosed a <b>Benign keratosis-like lesion</b>";
+          diagnosisP.innerHTML="Benign keratosis-like lesions are a type of noncancerous skin growth. People tend to get more of them as they get older and they can contain usually brown, black or light tan color in them. The lesion look waxy or scaly and slightly raised. They appear gradually, usually on the face, neck, chest or back. <b>These lesions are harmless and not contagious, and usually do not require treatment but may be removed in surgery if they become irritated by clothing or if desired by patient. Please still refer to a professional physician or dermatologist for further confirmation, evaluation, and potential treatment of the skin lesion.</b>";
+        }
+        else if(response.prediction.skin_class=="Dermatofibroma"){
+          modalTitle.innerHTML="SkinScan has diagnosed  <b>Dermatofibroma</b>";
+          diagnosisP.innerHTML="Cellular dermatofibromas look like small round or oval bumps. They’re usually less than 1 centimeter in diameter. They may be flesh-colored, brown or reddish-brown. Usually, dermatofibromas form on your arms or legs. <b> Because they’re noncancerous, dermatofibromas don’t always require treatment. If a dermatofibroma is large or causes discomfort, your healthcare provider may remove it. Removal is a short in-office procedure. Please still refer to a professional physician or dermatologist for further confirmation, evaluation, and potential treatment of the skin lesion.</b>";
+        }
+        
+        else if(response.prediction.skin_class=="Melanocytic nevi"){
+          modalTitle.innerHTML="SkinScan has diagnosed <b>Melanocytic nevi</b>";
+          diagnosisP.innerHTML="A usually noncancerous disorder of pigment-producing skin cells commonly called birth marks or moles and is very common with over 3 million cases in America each year. This type of mole is often large and caused by a disorder involving melanocytes, cells that produce pigment (melanin). Melanocytic nevi can be rough, flat, or raised. They can exist at birth or appear later. Rarely, melanocytic nevi can become cancerous. <b>Most cases don't require treatment, but some cases require removal of the mole. Please still refer to a professional physician or dermatologist for further confirmation, evaluation, and potential removal of the skin lesion.</b>";
+        
+        }
+        else if(response.prediction.skin_class=="Melanoma"){
+          modalTitle.innerHTML="SkinScan has diagnosed <b>Melanoma</b>";
+          diagnosisP.innerHTML="Melanoma is a serious type of skin cancer with over 200,000 cases per year in the United States. Melanoma occurs when the pigment-producing cells that give color to the skin become cancerous. Symptoms might include a new, unusual growth or a change in an existing mole. Melanomas can occur anywhere on the body. <b>Treatment may involve surgery, radiation, medications, or in some cases chemotherapy. Please still refer to a professional physician or dermatologist for further confirmation, evaluation, and potential treatment of the skin lesion.</b>";
+        }
+        else if(response.prediction.skin_class=="Vascular lesion"){
+          modalTitle.innerHTML="SkinScan has diagnosed a <b>Vascular lesion</b>";
+          diagnosisP.innerHTML="Vascular lesions are relatively common abnormalities of the skin and underlying tissues, more commonly known as birthmarks. While these birthmarks can look similar at times, they each vary in terms of origin and necessary treatment. <b>They are harmless and do not require treatment, yet may be removed using treatments such as laser therapy. Please still refer to a professional physician or dermatologist for further confirmation, evaluation, and potential treatment of the skin lesion.</b>";
+        }
+
+    })
+});
+
+});
+
+        
+
+    </script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{url_for('static',filename='styles.css')}}">
+    <title>SkinScan</title>
+    <link rel="icon" type="image/x-icon" href="{{url_for('static',filename='favicon.ico')}}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500&family=Mukta&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Mukta&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+
+      <nav  class="navbar navbar-light bg-light bg-gradient ">
+        <div class="container-fluid justify-content-center">
+          <a class="navbar-brand" href="#">
+            <img src="{{url_for('static',filename='skin.png')}}" alt="" width="30" height="24" class="d-inline-block align-text-top">
+            <span id="title">SkinScan</span>
+            <img src="{{url_for('static',filename='skin.png')}}" alt="" width="30" height="24" class="d-inline-block align-text-top">
+            
+          </a>
+        </div>
+      </nav>
+      <h1 class="text-center"></h1>
+    <div class="spacer"></div>
+    <h1 class="text-center">Welcome to SkinScan Diagnosis!</h1>
+    <p class="text-center">Please Upload a <b>Clear Well-lit Centered Close-Up </b>.PNG Image of your Skin Lesion Below</p>
+<div class="spacer"></div>
+    <div class="container">
+        <div class="row">
+          <div class="col">
+         
+          </div>
+          <div class="col">
+            <div class="input-group mb-3">
+                <input id="image-selector" type="file" class="form-control" id="inputGroupFile02">
+                <label class="input-group-text" for="inputGroupFile02">Upload</label>
+              </div>
+          </div>
+          <div class="col">
+          
+          </div>
+        </div>
+        <div class="row spacer"></div>
+            <div class="row">
+                <div class="col text-center ">
+                    <!-- Button trigger modal -->
+<button type="button" id="predict-button" class="btn btn-primary mx-auto" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Get Prediction
+  </button>
+  
+
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">SkinScan has diagnosed </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        
+        <div class="modal-body justify-content-center text-center">
+            <!-- <canvas class="mx-auto" id="canvas" width="244" height="244"></canvas> -->
+        <img id="selected-image" src="" alt="">
+        <div class="spacer"></div>
+          <p id="diagnosis"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+                   </div>
+            </div>
+           <!-- <div class="row">
+            <div class="col">
+                
+                <button id="start-camera" type="button" class="btn btn-dark">Start Camera</button>
+                <video id="video" width="244" height="244" autoplay></video>
+                <button id="click-photo" type="button" class="btn btn-success">Click Photo</button>
+                
+            </div>
+           </div> -->
+          </div>
+          
+
+   
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+ 
+</html>
