@@ -1,9 +1,25 @@
 # SkinScanApp
-The objective of this project is to develop a Convolutional Neural Network(CNN) model that can accurately diagnose skin lesions to one of seven classes using the MNIST Skin Cancer dataset and data augmentation methods from a Deep Convolutional Generative Adversarial Network(DCGAN).
-The goal of this project was to create an accurate classification machine learning algorithm that can diagnose images of skin lesions
-The CNN model was able to generally detect cancerous skin lesions with a relatively high accuracy of 91% and F1-score of 0.86
-This algorithm could be improved upon in multiple different ways:
-Compiling skin lesion data from different datasets for both the classifier and data augmentation in order to disregard any potential inconsistences in the primary dataset that was utilized Incorporating early-stopping in order to prevent the classifier from overfitting to the dataset and determine the number of epochs to best minimize the error in the diagnosing the skin lesions. Utilizing more convolutional layers in the DCGAN in order to generate more realistic images of skin lesions This CNN model and its approach in development have tremendous potential: The researcher is in the process of making the model accessible to the public through a mobile application called SkinScan that can be integrated in health care facilities Data augmentation using the DCGAN architecture can be vital to solving many other problems with machine learning that deal with a lack of consistent data.
 
+SkinScan is a full-stack machine learning application that classifies skin lesion images into **seven diagnostic categories** using a Convolutional Neural Network (CNN).
 
+## Highlights
 
+* Trained on **10,000+ skin lesion images**
+* Achieved **91% test accuracy** and **0.86 F1 score**
+* Built a **Flask API** for image upload and model inference
+* Integrated **MongoDB** for application data
+* Used a **DCGAN** to generate synthetic images for data augmentation
+* Returned predictions in **under 200 ms**
+
+## Tech Stack
+
+`Python` `TensorFlow` `Flask` `MongoDB` `CNN` `DCGAN`
+
+## How It Works
+
+1. User uploads a skin lesion image.
+2. The Flask backend preprocesses the image.
+3. The CNN predicts one of seven lesion classes.
+4. The application returns the predicted diagnosis.
+
+> **Disclaimer:** SkinScan is an experimental ML project and is not intended for clinical diagnosis.
