@@ -22,4 +22,3 @@ SkinScan is a full-stack machine learning application that classifies skin lesio
 3. The CNN predicts one of seven lesion classes.
 4. The application returns the predicted diagnosis.
 
-> **Disclaimer:** SkinScan is an experimental ML project and is not intended for clinical diagnosis.
